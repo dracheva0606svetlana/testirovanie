@@ -1,0 +1,71 @@
+@extends('layouts.master')
+@section('page_title', 'Главная')
+
+@if(Qs::userIsTeamSA())
+    @section('header_right')
+        <a href="{{ route('events.create') }}" type="submit" class="btn btn-primary">Добавить</a>
+    @endsection
+@endif
+
+@section('content')
+
+
+
+<div id='calendar'></div>
+
+<style>
+    .fc-event, .fc-event-dot {
+        background: var(--color-primary);
+        border: 1px solid  var(--color-primary);
+        color: #fff!important;
+    }
+
+    .fc-event:hover {
+        background: var(--color-primary);
+        border: 1px solid  var(--color-primary);
+        color: #fff!important;
+        opacity: .8;
+    }
+
+    .fc-col-header-cell-cushion{
+        color:var(--bs-heading-color) !important;
+    }
+
+    .fc-daygrid-event-dot {display: none}
+</style>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        console.log()
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'ru',
+            firstDay: 1,
+            eventTimeFormat: {
+                hour: 'numeric',
+                minute: '2-digit',
+                meridiem: false
+            },
+            dayHeaderFormat: { weekday: 'long' },
+            events: {!! json_encode($events) !!},
+            // headerToolbar: {
+            //     left: 'prev,next',
+            //     center: 'title',
+            //     right: 'dayGridWeek,dayGridDay' // user can switch between the two
+            // }
+            buttonText: {
+              today:    'today1',
+                  month:    'month',
+              week:     'week',
+              day:      'day',
+              list:     'list'
+            }
+        });
+        calendar.render();
+      });
+
+    </script>
+
+
+@endsection
